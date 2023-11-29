@@ -6,8 +6,7 @@
 		"access": "public"
 	},
 	"exports": {
-		".": "./dist/index.js",
-		"./src/*.ts": "./src/*.ts"
+		".": "./dist/index.js"
 	},
 	"types": "./dist/index.d.ts",
 	"files": [
