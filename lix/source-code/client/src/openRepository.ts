@@ -22,10 +22,19 @@ const {
 	log,
 	listServerRefs,
 	checkout,
-	// fetch as isoFetch
+	commit: isoCommit,
+	// fetch: isoFetch
 } = isoGit
 
 const verbose = false
+
+const whitelistedExperimentalRepos = [
+	"inlang/example",
+	"inalng/ci-test-repo",
+	"janfjohannes/inlang-example",
+	"inlang/monorepo",
+	"inalng/example-test",
+]
 
 export async function openRepository(
 	url: string,
@@ -73,6 +82,8 @@ export async function openRepository(
 
 	// TODO: support for url scheme to use local repo already in the fs
 	const gitUrl = `https://${repoHost}/${owner}/${repoName}`
+
+	const enableExperimentalFeatures = whitelistedExperimentalRepos.includes(`${owner}/${repoName}`)
 
 	// the directory we use for all git operations
 	const dir = "/"
@@ -208,7 +219,7 @@ export async function openRepository(
 		},
 
 		commit(cmdArgs) {
-			return commit({
+			const commitArgs = {
 				fs: withLazyFetching({
 					nodeishFs: rawFs,
 					verbose,
@@ -219,7 +230,13 @@ export async function openRepository(
 				ref: args.branch,
 				author: cmdArgs.author,
 				message: cmdArgs.message,
-			})
+			}
+			if (enableExperimentalFeatures) {
+				console.warn("using experimental git features for repo.")
+				return commit(commitArgs)
+			} else {
+				return isoCommit(commitArgs)
+			}
 		},
 
 		push() {
