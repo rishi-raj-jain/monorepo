@@ -151,6 +151,7 @@ export const loadProject = async (args: {
 				return
 			}
 
+			// TODO #1585 this how  the messages are loaded 
 			const loadAndSetMessages = async (fs: NodeishFilesystemSubset) => {
 				makeTrulyAsync(
 					_resolvedModules.resolvedPluginApi.loadMessages({
@@ -168,10 +169,12 @@ export const loadProject = async (args: {
 			const fsWithWatcher = createNodeishFsWithWatcher({
 				nodeishFs: nodeishFs,
 				updateMessages: () => {
+					// TODO #1585 this is where the messages are loaded (all) when the message file changed
 					loadAndSetMessages(nodeishFs)
 				},
 			})
 
+			// TODO #1585 inital load of the messages 
 			loadAndSetMessages(fsWithWatcher)
 		})
 
@@ -248,6 +251,7 @@ export const loadProject = async (args: {
 		)
 
 		createEffect(() => {
+			// TODO #1585 this triggers the save whenever one message changes - we don't know the message that has changed so
 			debouncedSave(messagesQuery.getAll())
 		})
 

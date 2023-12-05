@@ -49,11 +49,14 @@ export const resolvePlugins: ResolvePluginsFunction = async (args) => {
 			)
 		}
 
+		// TODO #1585 this is where the existance of load and save message is checked for a specific plugin
+		// TODO #1585 rename to import
 		// -- ALREADY DEFINED LOADMESSAGES / SAVEMESSAGES / DETECTEDLANGUAGETAGS --
 		if (typeof plugin.loadMessages === "function" && result.data.loadMessages !== undefined) {
 			result.errors.push(new PluginLoadMessagesFunctionAlreadyDefinedError({ id: plugin.id }))
 		}
 
+		// TODO #1585 rename to export
 		if (typeof plugin.saveMessages === "function" && result.data.saveMessages !== undefined) {
 			result.errors.push(new PluginSaveMessagesFunctionAlreadyDefinedError({ id: plugin.id }))
 		}
