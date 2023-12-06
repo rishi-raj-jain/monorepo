@@ -12,7 +12,7 @@ const routes = [
 	{ path: "/c", dynamic: true },
 	{ path: "/documentation", dynamic: true },
 	{ path: "/g", dynamic: true },
-	{ path: "/m", dynamic: true },
+	{ path: "/m", dynamic: true, queries: ["", "?view=changelog"] },
 	{ path: "/newsletter", dynamic: false },
 	{ path: "/search", dynamic: false },
 	{ path: "/editor", dynamic: false },
@@ -53,6 +53,21 @@ async function generateSitemap() {
 								item.id.replaceAll(".", "-"),
 							publishDate
 						)}`
+						if (item.id.split(".")[1] === "inlang" && item.id.split(".")[2] !== "globelens") {
+							for (const query of route.queries) {
+								content = `${content}${formatPage(
+									siteURL +
+										locale +
+										route.path +
+										"/" +
+										item.uniqueID +
+										"/" +
+										item.id.replaceAll(".", "-") +
+										query,
+									publishDate
+								)}`
+							}
+						}
 					}
 				}
 			}
